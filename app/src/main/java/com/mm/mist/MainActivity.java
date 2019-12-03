@@ -1,13 +1,13 @@
 package com.mm.mist;
 
-import android.Manifest;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import androidx.cardview.widget.CardView;
 import butterknife.BindView;
@@ -16,7 +16,11 @@ import butterknife.OnClick;
 public class MainActivity extends BaseActivity {
 
     @BindView(R.id.iv_background) ImageView ivBackground;
+    @BindView(R.id.iv_blur) ImageView iv_blur;
     @BindView(R.id.cv_blur) CardView cvBlur;
+    @BindView(R.id.sb_alpha) SeekBar sbAlpha;
+    @BindView(R.id.sb_test) SeekBar sb_test;
+    @BindView(R.id.tv_test) TextView tv_test;
 
     @Override
     public int getLayoutId() {
@@ -26,7 +30,43 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setSeekBarListener(sbAlpha, 1);
+        setSeekBarListener(sb_test, 2);
+//        BlurKit.init(this );
+    }
 
+    private void setSeekBarListener(SeekBar seekBar, int tag) {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                switch (tag) {
+                    case 1:
+                        BlurImgUtil.displayBlurImg(MainActivity.this, R.mipmap.ic_test, iv_blur, i);
+
+//                     iv_blur.setAlpha((float) i / 100);
+//                        Blurry.with(MainActivity.this)
+//                                .radius(i)
+//                                .sampling(8)
+//                                .async()
+//                                .onto(cvBlur);
+
+                        break;
+                    case 2:
+                        iv_blur.setAlpha((float) i / 100);
+                        break;
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private void pickColor() {
@@ -52,8 +92,15 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.cv_blur:
 
-                new RxPermissions(this)
-                        .request(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+//                Blurry.with(this)
+//                        .radius(55)
+//                        .sampling(8)
+//                        .async()
+//                        .onto(cvBlur);
+                //  BlurKit.getInstance().blur(cvBlur, 33);
+
+//                Bitmap blurBitmap = BlurBitmapUtil.blurBitmap(this, image, 20);
+//                cvBlur.setImageBitmap(blurBitmap);
 
 
                 break;
